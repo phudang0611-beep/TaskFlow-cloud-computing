@@ -24,6 +24,7 @@ export default function TeamView({
   pendingInvitations = [],
   onCancelInvitation,
   onRemoveMember,
+  onDeleteProject,
 }) {
   const [search, setSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
@@ -257,6 +258,40 @@ export default function TeamView({
                 )}
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* SECTION 3: Project Settings & Danger Zone */}
+      {canManage && currentProject && (
+        <div className="space-y-3 pt-6 border-t border-slate-200/80">
+          <div className="p-4 rounded-2xl border border-rose-200 bg-rose-50/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h3 className="text-sm font-bold text-rose-900 flex items-center gap-1.5">
+                <Trash2 className="w-4 h-4 text-rose-600" />
+                <span>Xóa dự án ({currentProject.name})</span>
+              </h3>
+              <p className="text-xs text-rose-700/80 mt-0.5">
+                Chỉ dành cho Project Lead hoặc Quản trị viên. Hành động này sẽ xóa dự án, toàn bộ thành viên và các công việc liên quan.
+              </p>
+            </div>
+            {onDeleteProject && (
+              <button
+                type="button"
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      `CẢNH BÁO: Bạn có chắc chắn muốn xóa vĩnh viễn dự án "${currentProject.name}" [${currentProject.key}] không?\nToàn bộ công việc và lịch sử trong dự án sẽ bị xóa.`
+                    )
+                  ) {
+                    onDeleteProject(currentProject.id);
+                  }
+                }}
+                className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-all shadow-xs shrink-0 cursor-pointer"
+              >
+                Xóa dự án này
+              </button>
+            )}
           </div>
         </div>
       )}

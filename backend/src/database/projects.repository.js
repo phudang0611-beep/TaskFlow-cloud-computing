@@ -164,12 +164,19 @@ async function removeProjectMember(projectId, memberUserId, user) {
 }
 
 async function deleteProject(projectId, user) {
-  if (user.role !== 'admin') {
-    throw new ForbiddenError('Only System Administrators can delete projects');
+  const project = await getProjectById(projectId, user);
+  const isLead = String(project.lead_id) === String(user.id);
+  const isAdmin = user.role === 'admin';
+  if (!isAdmin && !isLead) {
+    throw new ForbiddenError('Chỉ Project Lead hoặc Quản trị viên mới có quyền xóa dự án');
   }
+
+  // Soft delete all tasks in the project
+  await pool.query('UPDATE tasks SET deleted_at = NOW() WHERE project_id = $1 AND deleted_at IS NULL', [projectId]);
+
   const { rowCount } = await pool.query('DELETE FROM projects WHERE id = $1', [projectId]);
   if (rowCount === 0) throw new NotFoundError('Project not found');
-  return { deleted: true };
+  return { id: projectId, deleted: true };
 }
 
 async function inviteProjectMember(projectId, inviteeId, inviterUser) {

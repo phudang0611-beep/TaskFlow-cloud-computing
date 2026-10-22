@@ -72,7 +72,6 @@ router.delete(
 
 router.delete(
   '/:id',
-  authorize('admin'),
   param('id').isInt({ min: 1 }),
   validate,
   projectsController.deleteProject

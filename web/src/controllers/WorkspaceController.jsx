@@ -823,6 +823,7 @@ export default function WorkspaceController() {
           setCurrentProject(proj);
           showToast(`Switched to project ${proj.name} [${proj.key}]`);
         }}
+        onDeleteProject={handleDeleteProject}
         onOpenAccountModal={handleOpenAccountModal}
       />
 
@@ -962,6 +963,7 @@ export default function WorkspaceController() {
               pendingInvitations={projectInvitations}
               onCancelInvitation={handleCancelInvitation}
               onRemoveMember={handleRemoveProjectMember}
+              onDeleteProject={handleDeleteProject}
             />
           )}
 
