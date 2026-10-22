@@ -187,51 +187,30 @@ export default function Sidebar({
                   const isSelected = p.id === currentProject?.id;
                   const isUserLead = String(p.lead_id) === String(currentUser?.id);
                   return (
-                    <div
+                    <button
                       key={p.id}
-                      className={`w-full p-2 rounded-xl text-left text-xs flex items-center justify-between transition-all group ${
+                      onClick={() => {
+                        onSelectProject(p);
+                        setProjectDropdownOpen(false);
+                      }}
+                      className={`w-full p-2 rounded-xl text-left text-xs flex items-center justify-between transition-all cursor-pointer ${
                         isSelected
                           ? 'bg-blue-50 text-blue-700 font-bold border border-blue-200/60'
                           : 'hover:bg-slate-50 text-slate-700'
                       }`}
                     >
-                      <button
-                        type="button"
-                        onClick={() => {
-                          onSelectProject(p);
-                          setProjectDropdownOpen(false);
-                        }}
-                        className="flex items-center gap-2 truncate flex-1 text-left cursor-pointer"
-                      >
-                        <span className="font-mono font-bold text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 shrink-0">
+                      <div className="flex items-center gap-2 truncate">
+                        <span className="font-mono font-bold text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-700">
                           {p.key}
                         </span>
                         <span className="truncate">{p.name}</span>
-                      </button>
-
-                      <div className="flex items-center gap-1 shrink-0 ml-1">
-                        {isUserLead && (
-                          <span className="text-[9px] bg-amber-100 text-amber-800 font-bold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
-                            <Crown className="w-2.5 h-2.5" /> Lead
-                          </span>
-                        )}
-                        {(isAdmin || isUserLead) && onDeleteProject && (
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              if (window.confirm(`Bạn có chắc muốn xóa dự án "${p.name}" [${p.key}] không?\nToàn bộ công việc trong dự án sẽ bị xóa.`)) {
-                                onDeleteProject(p.id);
-                              }
-                            }}
-                            className="p-1 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
-                            title={`Xóa dự án ${p.name}`}
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        )}
                       </div>
-                    </div>
+                      {isUserLead && (
+                        <span className="text-[9px] bg-amber-100 text-amber-800 font-bold px-1.5 py-0.5 rounded-full flex items-center gap-0.5 shrink-0">
+                          <Crown className="w-2.5 h-2.5" /> Lead
+                        </span>
+                      )}
+                    </button>
                   );
                 })}
               </div>
