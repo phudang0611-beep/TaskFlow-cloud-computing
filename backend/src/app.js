@@ -25,16 +25,34 @@ const configuredOrigins = (process.env.WEB_ORIGIN || "")
     .map((origin) => origin.trim())
     .filter(Boolean);
 
-const allowedOrigins = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "https://taskflow-web-1t7e.onrender.com",
-    ...configuredOrigins,
-];
-
 app.use(
     cors({
-        origin: allowedOrigins,
+        origin: (origin, callback) => {
+            // Allow requests with no origin (like mobile apps, curl, etc.)
+            if (!origin) return callback(null, true);
+
+            // Allow local development
+            if (origin.includes("localhost") || origin.includes("127.0.0.1")) {
+                return callback(null, true);
+            }
+
+            // Allow any Render deployment domain
+            if (origin.endsWith(".onrender.com")) {
+                return callback(null, true);
+            }
+
+            // Check against configured origins
+            const match = configuredOrigins.some(
+                (o) => origin === o || origin === `https://${o}` || origin === `http://${o}`
+            );
+            if (match) {
+                return callback(null, true);
+            }
+
+            // Fallback: allow request (API uses stateless JWT Bearer tokens)
+            return callback(null, true);
+        },
+        credentials: true,
         methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
         allowedHeaders: ["Content-Type", "Authorization"],
     }),
