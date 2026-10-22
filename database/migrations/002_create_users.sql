@@ -1,4 +1,8 @@
-CREATE TYPE user_role AS ENUM ('admin', 'employee');
+DO $$ BEGIN
+  CREATE TYPE user_role AS ENUM ('admin', 'employee');
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
 CREATE TABLE IF NOT EXISTS users (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,

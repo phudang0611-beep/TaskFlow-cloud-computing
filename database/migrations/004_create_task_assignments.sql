@@ -1,5 +1,14 @@
-CREATE TYPE assignment_status_type AS ENUM ('active', 'revoked');
-CREATE TYPE task_status_type AS ENUM ('todo', 'in_progress', 'completed');
+DO $$ BEGIN
+  CREATE TYPE assignment_status_type AS ENUM ('active', 'revoked');
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
+
+DO $$ BEGIN
+  CREATE TYPE task_status_type AS ENUM ('todo', 'in_progress', 'completed');
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
 CREATE TABLE IF NOT EXISTS task_assignments (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,

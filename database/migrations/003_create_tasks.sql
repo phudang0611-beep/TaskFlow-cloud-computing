@@ -1,4 +1,8 @@
-CREATE TYPE task_priority AS ENUM ('low', 'medium', 'high');
+DO $$ BEGIN
+  CREATE TYPE task_priority AS ENUM ('low', 'medium', 'high');
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
 CREATE TABLE IF NOT EXISTS tasks (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
