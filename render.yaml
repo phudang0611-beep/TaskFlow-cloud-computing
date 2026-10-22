@@ -14,6 +14,8 @@ services:
             value: 22.12.0
           - key: TRUST_PROXY_HOPS
             value: "1"
+          - key: API_URL
+            value: https://taskflow-api-0y78.onrender.com
           - key: DATABASE_URL
             value: postgresql://neondb_owner:npg_vImtpEGk8S9Z@ep-bitter-cell-azrbbn7e.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require
           - key: SUPABASE_URL

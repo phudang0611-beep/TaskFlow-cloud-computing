@@ -60,7 +60,20 @@ app.use(
 
 app.use(express.json({ limit: "1mb" }));
 
-app.use("/api/files", express.static(path.resolve(__dirname, "../uploads")));
+app.use(
+    "/api/files",
+    (req, res, next) => {
+        if (req.query.download === "1" || req.query.download === "true") {
+            const filename = path.basename(req.path);
+            res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+        }
+        next();
+    },
+    express.static(path.resolve(__dirname, "../uploads")),
+    (req, res) => {
+        res.status(404).json({ status: "error", message: "File not found or storage expired" });
+    }
+);
 
 app.use("/api", apiRoutes);
 

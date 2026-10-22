@@ -613,12 +613,18 @@ export default function WorkspaceController() {
   const handleGetDocumentUrl = async (taskId, docId) => {
     try {
       const { response, data } = await requestJson(
-        `/api/tasks/${taskId}/documents/${docId}/url`,
+        `/api/tasks/${taskId}/documents/${docId}/url?disposition=attachment`,
         { token }
       );
       if (!response.ok) throw new Error(data?.message || 'Failed to get download URL');
       if (data?.data?.url) {
-        window.open(data.data.url, '_blank');
+        const link = document.createElement('a');
+        link.href = data.data.url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
       }
     } catch (err) {
       showToast(err.message, 'error');

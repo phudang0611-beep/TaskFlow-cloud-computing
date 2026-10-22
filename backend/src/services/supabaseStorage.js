@@ -176,8 +176,15 @@ async function createSignedUrl(storagePath, download = false) {
 
   // Local filesystem fallback URL
   const port = process.env.PORT || 3000;
-  const baseUrl = process.env.API_URL || `http://localhost:${port}`;
-  return `${baseUrl}/api/files/${storagePath}`;
+  let baseUrl = process.env.RENDER_EXTERNAL_URL || process.env.API_URL;
+  if (!baseUrl) {
+    baseUrl = process.env.NODE_ENV === 'production'
+      ? 'https://taskflow-api-0y78.onrender.com'
+      : `http://localhost:${port}`;
+  }
+  const cleanBase = baseUrl.replace(/\/+$/, '');
+  const downloadParam = download ? '?download=1' : '';
+  return `${cleanBase}/api/files/${storagePath}${downloadParam}`;
 }
 
 function createStoragePath(taskId, reportId, filename) {
