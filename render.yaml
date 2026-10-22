@@ -1,11 +1,3 @@
-databases:
-    - name: taskflow-db
-      databaseName: taskflow
-      user: taskflow
-      plan: free
-      region: singapore
-      postgresMajorVersion: "16"
-
 services:
     - type: web
       name: taskflow-api
@@ -23,9 +15,7 @@ services:
           - key: TRUST_PROXY_HOPS
             value: "1"
           - key: DATABASE_URL
-            fromDatabase:
-                name: taskflow-db
-                property: connectionString
+            value: postgresql://neondb_owner:npg_vImtpEGk8S9Z@ep-bitter-cell-azrbbn7e.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require
           - key: SUPABASE_URL
             sync: false
           - key: SUPABASE_SERVICE_ROLE_KEY
