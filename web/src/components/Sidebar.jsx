@@ -214,20 +214,6 @@ export default function Sidebar({
                   );
                 })}
               </div>
-
-              <div className="pt-1.5 mt-1 border-t border-slate-100">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setProjectDropdownOpen(false);
-                    onOpenCreateProjectModal?.();
-                  }}
-                  className="w-full py-1.5 px-2 text-xs font-semibold text-blue-600 hover:bg-blue-50 rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <FolderPlus className="w-3.5 h-3.5" />
-                  <span>+ Tạo dự án mới</span>
-                </button>
-              </div>
             </div>
           )}
         </div>
